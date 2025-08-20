@@ -1,5 +1,7 @@
-package com.tvf.societystore.dto;
+package com.tvf.societystore.dto.cart;
 
+
+import com.tvf.societystore.dto.product.ProductDTO;
 
 /**
  * Represents a single item within a user's cart in the API response.

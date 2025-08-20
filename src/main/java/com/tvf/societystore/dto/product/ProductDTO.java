@@ -1,4 +1,4 @@
-package com.tvf.societystore.dto;
+package com.tvf.societystore.dto.product;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

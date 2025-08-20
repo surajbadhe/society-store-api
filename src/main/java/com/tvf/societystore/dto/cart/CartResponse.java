@@ -1,4 +1,4 @@
-package com.tvf.societystore.dto;
+package com.tvf.societystore.dto.cart;
 
 import java.util.List;
 

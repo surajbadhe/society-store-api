@@ -34,6 +34,7 @@ public class User implements UserDetails {
     @JoinColumn(name = "society_id")
     private Society society;
 
+    private String societyJoinStatus; // e.g., "PENDING", "APPROVED"
     // Spring Security UserDetails implementation
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

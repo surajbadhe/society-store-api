@@ -5,22 +5,22 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "cart_items", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"user_id", "product_id"})
-})
-public class CartItem {
+@Table(name = "offer_commitments")
+public class OfferCommitment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "offer_id", nullable = false)
+    private Offer offer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
-
     @Column(nullable = false)
     private int quantity;
+
+    private String paymentStatus; // e.g., "PENDING", "PAID"
 }

@@ -1,0 +1,63 @@
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import java.math.BigDecimal;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+public class ProductServiceTest {
+
+    @Mock
+    private ProductRepository productRepository;
+
+    @Mock
+    private UserRepository userRepository;
+
+    @InjectMocks
+    private ProductServiceImpl productService;
+
+    private User wholesaler;
+
+    @BeforeEach
+    void setUp() {
+        // Create a mock user for security context
+        wholesaler = new User();
+        wholesaler.setId(1L);
+        wholesaler.setEmail("wholesaler@example.com");
+        wholesaler.setRole(Role.WHOLESALER);
+
+        // Mock the security context to simulate a logged-in user
+        SecurityContextHolder.getContext().setAuthentication(
+            new UsernamePasswordAuthenticationToken(wholesaler.getEmail(), null)
+        );
+    }
+
+    @Test
+    void testCreateProduct_Success() {
+        // Arrange
+        ProductDTO requestDTO = new ProductDTO(null, "Test Product", "A test product", "unit", new BigDecimal("10.00"), null);
+
+        when(userRepository.findByEmail(wholesaler.getEmail())).thenReturn(Optional.of(wholesaler));
+        when(productRepository.save(any(Product.class))).thenAnswer(invocation -> {
+            Product p = invocation.getArgument(0);
+            p.setId(1L); // Simulate saving and getting an ID back
+            return p;
+        });
+
+        // Act
+        ProductDTO resultDTO = productService.createProduct(requestDTO);
+
+        // Assert
+        assertNotNull(resultDTO);
+        assertEquals("Test Product", resultDTO.name());
+        assertEquals(wholesaler.getId(), resultDTO.wholesalerId());
+    }
+}

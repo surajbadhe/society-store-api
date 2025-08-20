@@ -2,13 +2,12 @@ package com.tvf.societystore.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "cart_items", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"user_id", "product_id"})
-})
-public class CartItem {
+@Table(name = "notifications")
+public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,10 +16,9 @@ public class CartItem {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
-
     @Column(nullable = false)
-    private int quantity;
+    private String message;
+
+    private boolean isRead = false;
+    private LocalDateTime createdAt;
 }
